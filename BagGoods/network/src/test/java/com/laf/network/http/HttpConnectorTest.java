@@ -6,12 +6,15 @@ import com.laf.network.http.Response.ResponseCode;
 import com.laf.network.util.NameValuePair;
 import com.laf.network.util.StringUtil;
 
+import javax.net.ssl.*;
 import java.io.*;
 import java.net.*;
+import java.security.GeneralSecurityException;
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.GZIPInputStream;
-
-import static org.junit.Assert.*;
+import java.util.zip.GZIPOutputStream;
 
 /**
  * Created by apple on 17/2/23.
@@ -28,7 +31,7 @@ public class HttpConnectorTest {
      */
     private static final int READ_TIMEOUT = (int) TimeUnit.SECONDS.toMillis(60L);
 
-    public static Response connect(Request request) {
+        public static Response connect(Request request) {
         Response response = new Response();
         //没有设置对应的请求
 
@@ -41,8 +44,11 @@ public class HttpConnectorTest {
 
         try {
             URL url = new URL(request.getUrl());
-            //这里没有用到https
-            conn = (HttpURLConnection) url.openConnection();
+            if (!url.getProtocol().toLowerCase().equals("https")) {
+                conn = (HttpURLConnection) url.openConnection();
+            } else {
+                conn = getHttpsConn(url);
+            }
 System.out.println(conn.toString());
             conn.setDoInput(true);
             conn.setUseCaches(false);
@@ -51,13 +57,43 @@ System.out.println(conn.toString());
 
             conn.setConnectTimeout(CONNECT_TIMEOUT);
             conn.setReadTimeout(READ_TIMEOUT);
-System.out.println(READ_TIMEOUT);
-            if (request.getBody() != null) {
-                byte[] data = request.getBody().getBytes("UTF-8");
-                OutputStream out = conn.getOutputStream();
-                out.write(data);
-                out.flush();
 
+            if (request.getContentType() == ContentType.FILE) {
+                StringBuilder contentBody = new StringBuilder();
+                String endBoundary = "\r\n--" + request.getBoundary() + "--\r\n";
+                OutputStream out = conn.getOutputStream();
+
+                out.write(("--" + request.getBoundary()).getBytes("UTF-8"));
+                contentBody.append("\r\n")
+                           .append("Content-Disposition:form-data; name=\"upload1\";")
+                           .append("filename=" + "\"" + request.getBody() + "\"")
+                           .append("\r\n")
+                           .append("Content-Type:application/octet-stream")
+                           .append("\r\n\r\n");
+                out.write(contentBody.toString().getBytes("UTF-8"));
+                byte[] data = request.getFile().toByteArray();
+
+                out.write(data, 0, data.length);
+                request.getFile().close();
+
+                out.write(endBoundary.getBytes("UTF-8"));
+                out.flush();
+System.out.println(out);
+                out.close();
+
+            } else if (request.getBody() != null) {
+                byte[] data = request.getBody().getBytes("UTF-8");
+
+                OutputStream out = conn.getOutputStream();
+                if (request.isGzip()) {
+                    GZIPOutputStream gzOut = new GZIPOutputStream(out);
+                    gzOut.write(data);
+                    gzOut.flush();
+                    gzOut.close();
+                } else {
+                    out.write(data);
+                    out.flush();
+                }
                 out.close();
             }
 
@@ -72,11 +108,16 @@ System.out.println(READ_TIMEOUT);
                 case HttpURLConnection.HTTP_OK:
                 case HttpURLConnection.HTTP_CREATED:
                     setResponseData(request, response, conn, false);
+//                    Log.d(TAG, "url : " + request.getUrl()
+//                        + " statuscode : " + responseCode
+//                        + " body : " + response.getData());
                     System.out.println("url : " + request.getUrl()
                         + " statuscode : " + responseCode
                         + " body : " + response.getData());
                     break;
                 default:
+//                    Log.d(TAG, "url : " + request.getUrl()
+//                        + " statuscode : " + responseCode);
                    System.out.println("url : " + request.getUrl()
                         + " statuscode : " + responseCode);
                     break;
@@ -110,6 +151,8 @@ System.out.println(READ_TIMEOUT);
                                 case HttpURLConnection.HTTP_INTERNAL_ERROR:
                                     setResponseData(request, response, conn, true);
                                 default:
+//                                    Log.d(TAG, "IOException get statuscode: " + responseCode
+//                                            + " url : " + request.getUrl());
                                     System.out.println("IOException get statuscode: " + responseCode
                                             + " url : " + request.getUrl());
                                     break;
@@ -155,12 +198,32 @@ System.out.println(READ_TIMEOUT);
         ContentType contentType = request.getContentType();
         switch(contentType) {
             case XML:
-                conn.setRequestProperty("Content-Type", "text/xml;charset=UTF-8");
+                if (request.getRequestMethod() == RequestMethod.POST) {
+                    conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+                } else {
+                    conn.setRequestProperty("Content-Type", "application/xml;charset=UTF-8");
+                }
                 break;
             case JSON:
-                conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+                if (request.getRequestMethod() == RequestMethod.POST) {
+                    conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+                } else {
+                    conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+                }
                 break;
+            case FILE:
+                conn.setRequestProperty("Connection", "Keep-Alive");
+                conn.setRequestProperty("Charset", "UTF-8");
+                conn.setRequestProperty("Content-Type", "multipart/form-data;boundary" + request.getBoundary());
             default:
+        }
+
+        boolean isGzip = request.isGzip();
+        if (isGzip) {
+            conn.setRequestProperty("Accept-Encoding", "gzip");
+            if (request.getBody() != null) {
+                conn.setRequestProperty("Content-Encoding", "gzip");
+            }
         }
 
         if (request.getRequestProperties() != null) {
@@ -217,8 +280,8 @@ System.out.println(READ_TIMEOUT);
             is = conn.getInputStream();
 
         InputStream bis = null;
-        InputStream gzis = null;
-        if ("gzip".equals(conn.getHeaderField("Content-Type"))) {
+        InputStream gzis;
+        if ("gzip".equals(conn.getHeaderField("Content-Encoding"))) {
             gzis = new GZIPInputStream(is);
 
         } else {
@@ -228,9 +291,11 @@ System.out.println(READ_TIMEOUT);
             int result = bis.read(header);
             bis.reset();
 
+            //这是什么？也要进行解压
             if (result == 2 &&
                     ((header[0] & 0xFF) | ((header[1] & 0xFF) << 8)) == 0x8b1f) {
                 gzis = new GZIPInputStream(bis);
+                bis = null;
             } else {
                 gzis = bis;
                 bis = null;
@@ -251,7 +316,49 @@ System.out.println(READ_TIMEOUT);
         response.setData(new String(bytes, "UTF-8"));
 
     }
-//    private static HttpURLConnection getHttpsConn(URL url) throws IOException {
-//
-//    }
+
+    private static HttpURLConnection getHttpsConn(URL url) throws IOException {
+        trustAll();
+        HttpsURLConnection https = (HttpsURLConnection) url.openConnection();
+        return https;
+    }
+
+    //信任所有证书
+    private static void trustAll() {
+        TrustManager[] trustAllCertificates = new TrustManager[] {
+                new X509TrustManager() {
+                    @Override
+                    public X509Certificate[] getAcceptedIssuers() {
+                        return null;// Not relevant.
+                    }
+
+                    @Override
+                    public void checkClientTrusted(X509Certificate[] certs, String authType) {
+                        // Do nothing. Just allow them all.
+                    }
+
+                    @Override
+                    public void checkServerTrusted(X509Certificate[] certs, String authType) {
+                        // Do nothing. Just allow them all.
+                    }
+                }
+        };
+
+        HostnameVerifier trustAllHostnames = new HostnameVerifier() {
+            @Override
+            public boolean verify(String hostname, SSLSession session) {
+                return true;// Just allow them all.
+            }
+        };
+
+        try {
+            System.setProperty("jsse.enableSNIExtension", "false");
+            SSLContext sc = SSLContext.getInstance("TLS");
+            sc.init(null, trustAllCertificates, new SecureRandom());
+            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+            HttpsURLConnection.setDefaultHostnameVerifier(trustAllHostnames);
+        } catch (GeneralSecurityException e) {
+            e.printStackTrace();
+        }
+    }
 }

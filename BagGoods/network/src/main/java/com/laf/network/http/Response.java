@@ -3,7 +3,7 @@ package com.laf.network.http;
 /**
  * Created by apple on 17/2/16.
  */
-public class Response<T> {
+public class Response {
 
     public enum ResponseCode {
         /**
@@ -69,13 +69,13 @@ public class Response<T> {
 
     private String resultDesc;
 
-    private T obj;
+    private Object obj;
 
-    public T getObj() {
+    public Object getObj() {
         return obj;
     }
 
-    public void setObj(T obj) {
+    public void setObj(Object obj) {
         this.obj = obj;
     }
 

@@ -1,8 +1,5 @@
 package com.laf.network.http;
 
-import com.laf.network.http.HttpManagerTest;
-import com.laf.network.http.Request;
-import com.laf.network.http.Response;
 import com.laf.network.util.Base64;
 import com.laf.network.util.NameValuePair;
 import org.junit.Test;
@@ -14,11 +11,10 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by apple on 17/2/24.
  */
-public class ImpHttpManagerTest extends HttpManagerTest {
+public class DoGetHttpManagerTest extends HttpManagerTest {
 
     @Test
     public void testLogin() throws Exception {
-        System.out.println("into");
         this.login();
         TimeUnit.SECONDS.sleep(5);
     }
@@ -29,11 +25,6 @@ public class ImpHttpManagerTest extends HttpManagerTest {
     }
 
     protected String getBody(int action, List<NameValuePair<String, String>> datas) {
-        return null;
-    }
-
-    @Override
-    protected String getBody(int action, String datas) {
         return null;
     }
 
@@ -70,5 +61,9 @@ public class ImpHttpManagerTest extends HttpManagerTest {
     public String toString() {
         return this.getClass().getSimpleName();
     }
+
+
+
+
 
 }

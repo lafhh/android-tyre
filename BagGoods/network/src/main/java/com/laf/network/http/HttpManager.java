@@ -30,7 +30,7 @@ public abstract class HttpManager {
         void onProgress(boolean isInProgress);
     }
 
-    private IHttpListener iHttpListener;
+    IHttpListener iHttpListener;
 
     protected void send(final int action,
                      final List<NameValuePair<String, String>> datas) {
@@ -39,7 +39,6 @@ public abstract class HttpManager {
                 iHttpListener.onProgress(true);
 
                 Request request = buildRequest(action, datas);
-
 
                 Response response = HttpConnector.connect(request);
 
@@ -77,7 +76,7 @@ public abstract class HttpManager {
 
     protected abstract String getBody(int action, List<NameValuePair<String, String>> datas);
 
-    protected abstract String getBody(int action, String datas);
+//    protected abstract String getBody(int action, String datas);
 
     protected abstract Object handleData(int action,
                                          List<NameValuePair<String, String>> datas,
@@ -95,17 +94,22 @@ public abstract class HttpManager {
         return new ArrayList<>();
     }
 
-    private Request buildRequest(int action, List<NameValuePair<String, String>> datas) {
+    protected boolean isGzip(int action) { return false; }
+
+
+
+    protected Request buildRequest(int action, List<NameValuePair<String, String>> datas) {
         Request request = new Request();
         request.setUrl(getUrl(action, datas));
         request.setBody(getBody(action, datas));
         request.setRequestMethod(getRequestMethod(action));
         request.setContentType(getContentType(action));
         request.setRequestProperties(getRequestProperties(action));
+        request.setGzip(isGzip(action));
         return request;
     }
 
-    private void parserResult(int action, Response response) {
+    protected void parserResult(int action, Response response) {
         String data = response.getData();
 
         if (data != null) {
@@ -131,6 +135,10 @@ public abstract class HttpManager {
 
     public void setListenner(IHttpListener listener) {
         iHttpListener = listener;
+    }
+
+    protected Executor getsFixedThreadPool() {
+        return sFixedThreadPool;
     }
 }
 

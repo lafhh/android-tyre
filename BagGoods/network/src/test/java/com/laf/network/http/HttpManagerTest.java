@@ -1,9 +1,6 @@
 package com.laf.network.http;
 
 import android.util.Log;
-import com.laf.network.http.Request.ContentType;
-import com.laf.network.http.Request.RequestMethod;
-import com.laf.network.http.Response.ResponseCode;
 import com.laf.network.util.NameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,10 +11,10 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 /**
- * Created by apple on 17/2/23.
+ * Created by apple on 17/2/28.
  */
 public abstract class HttpManagerTest {
- private static final String TAG = "HttpManager";
+        private static final String TAG = "HttpManager";
 
     private static final int THREAD_POOL_MAX_SIZE = 5;
 
@@ -29,13 +26,12 @@ public abstract class HttpManagerTest {
         void onProgress(boolean isInProgress);
     }
 
-    private IHttpListener iHttpListener;
+    IHttpListener iHttpListener;
 
     protected void send(final int action,
                      final List<NameValuePair<String, String>> datas) {
         Runnable runnable = new Runnable() {
             public void run() {
-                System.out.println("run");
                 iHttpListener.onProgress(true);
 
                 Request request = buildRequest(action, datas);
@@ -43,7 +39,7 @@ public abstract class HttpManagerTest {
                 Response response = HttpConnectorTest.connect(request);
 
                 if (response.getResponseCode() == null) {
-                    response.setResponseCode(ResponseCode.Failed);
+                    response.setResponseCode(Response.ResponseCode.Failed);
                 }
 
                 switch (response.getResponseCode()) {
@@ -55,7 +51,7 @@ public abstract class HttpManagerTest {
                     case Conflict:
                     case InternalError:
                         parserResult(action, response);
-                        if (response.getResponseCode() == ResponseCode.Succeed) {
+                        if (response.getResponseCode() == Response.ResponseCode.Succeed) {
                             response.setObj(handleData(action, datas, response));
                         }
                         break;
@@ -70,46 +66,50 @@ public abstract class HttpManagerTest {
             }
         };
         sFixedThreadPool.execute(runnable);
-        System.out.println("end");
     }
 
     protected abstract String getUrl(int action, List<NameValuePair<String, String>> params);
 
     protected abstract String getBody(int action, List<NameValuePair<String, String>> datas);
 
-    protected abstract String getBody(int action, String datas);
+//    protected abstract String getBody(int action, String datas);
 
     protected abstract Object handleData(int action,
                                          List<NameValuePair<String, String>> datas,
                                          Response response);
 
-    protected RequestMethod getRequestMethod(int action) {
-        return RequestMethod.POST;
+    protected Request.RequestMethod getRequestMethod(int action) {
+        return Request.RequestMethod.POST;
     }
 
-    protected ContentType getContentType(int action) {
-        return ContentType.JSON;
+    protected Request.ContentType getContentType(int action) {
+        return Request.ContentType.JSON;
     }
 
     protected List<NameValuePair<String, String>> getRequestProperties(int action) {
         return new ArrayList<>();
     }
 
-    private Request buildRequest(int action, List<NameValuePair<String, String>> datas) {
+    protected boolean isGzip(int action) { return false; }
+
+
+
+    protected Request buildRequest(int action, List<NameValuePair<String, String>> datas) {
         Request request = new Request();
         request.setUrl(getUrl(action, datas));
         request.setBody(getBody(action, datas));
         request.setRequestMethod(getRequestMethod(action));
         request.setContentType(getContentType(action));
         request.setRequestProperties(getRequestProperties(action));
+        request.setGzip(isGzip(action));
         return request;
     }
 
-    private void parserResult(int action, Response response) {
+    protected void parserResult(int action, Response response) {
         String data = response.getData();
 
         if (data != null) {
-            if (getContentType(action) == ContentType.JSON) {
+            if (getContentType(action) == Request.ContentType.JSON) {
                 try {
                     JSONObject rootJsonObj = new JSONObject(data);
 
@@ -132,4 +132,9 @@ public abstract class HttpManagerTest {
     public void setListenner(IHttpListener listener) {
         iHttpListener = listener;
     }
+
+    protected Executor getsFixedThreadPool() {
+        return sFixedThreadPool;
+    }
 }
+
