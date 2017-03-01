@@ -78,7 +78,7 @@ System.out.println(conn.toString());
 
                 out.write(endBoundary.getBytes("UTF-8"));
                 out.flush();
-System.out.println(out);
+System.out.println("outputstream is " + out);
                 out.close();
 
             } else if (request.getBody() != null) {
@@ -94,6 +94,7 @@ System.out.println(out);
                     out.write(data);
                     out.flush();
                 }
+System.out.println("outputstream is " + out);
                 out.close();
             }
 
@@ -177,6 +178,7 @@ System.out.println(out);
         switch(method) {
             case GET:
                 conn.setRequestMethod("GET");
+                break;
             case POST:
                 conn.setRequestMethod("POST");
                 conn.setDoOutput(true);

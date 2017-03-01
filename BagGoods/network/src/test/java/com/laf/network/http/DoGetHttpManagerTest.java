@@ -20,18 +20,21 @@ public class DoGetHttpManagerTest extends HttpManagerTest {
     }
 
     protected String getUrl(int action, List<NameValuePair<String, String>> params) {
-        String url = "http://120.27.195.220/api/products.json?requestType=assignment";
+        String url = "http://120.27.195.220/api/products.json";
         return url;
     }
 
     protected String getBody(int action, List<NameValuePair<String, String>> datas) {
-        return null;
+        return "requestType=assignment";
     }
 
     @Override
     protected Object handleData(int action, List<NameValuePair<String, String>> datas, Response response) {
         String body = response.getData();
-        System.out.println(body);
+        if (body != null) {
+            //处理数据
+        }
+System.out.println("handleData(): " + body);
         return body;
     }
 
@@ -47,7 +50,7 @@ public class DoGetHttpManagerTest extends HttpManagerTest {
             @Override
             public void onResult(int action, Response response) {
                 String s = (String) response.getObj();
-                System.out.println("onresult " + s);
+                System.out.println("onResult() " + s);
             }
 
             @Override

@@ -69,7 +69,7 @@ public abstract class UploadHttpManagerTest extends HttpManagerTest {
         request.setGzip(isGzip(action));
         request.setBoundary(getBoundary(action));
         request.setFile(getFile(action, path));
-        System.out.println(request.getFile().getClass().getSimpleName());
+System.out.println(request.getFile().getClass().getSimpleName());
         return request;
     }
 
