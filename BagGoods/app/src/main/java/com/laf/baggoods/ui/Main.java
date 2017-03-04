@@ -1,9 +1,10 @@
-package com.laf.baggoods;
+package com.laf.baggoods.ui;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import com.laf.baggoods.R;
 
-public class MainActivity extends AppCompatActivity {
+public class Main extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

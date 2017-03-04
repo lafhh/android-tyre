@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="@dimen/tab_height"
+                  android:layout_alignParentBottom="true"
+                  android:gravity="center_vertical"
+                  android:background="@android:color/white"
+                  android:orientation="horizontal"
+    >
+        <RelativeLayout android:id="@+id/layout_tab_home"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+        >
+            <ImageView android:id="@+id/img_home"
+                       android:layout_width="@dimen/tab_img_width"
+                       android:layout_height="@dimen/tab_img_height"
+                       android:layout_centerHorizontal="true"
+                       android:src="@drawable/ico_baggoods_off"
+                       android:adjustViewBounds="true"
+                       android:scaleType="fitXY"
+                       android:padding="@dimen/padding_imageview"
+            />
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_below="@id/img_home"
+                      android:layout_centerHorizontal="true"
+                      android:text="@string/tab_home"
+                      android:textColor="@color/color_333333"
+                      android:textSize="@dimen/tab_text"
+            />
+        </RelativeLayout>
+        <RelativeLayout android:id="@+id/layout_tab_cart"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+        >
+            <ImageView android:id="@+id/img_cart"
+                       android:layout_width="@dimen/tab_img_width"
+                       android:layout_height="@dimen/tab_img_height"
+                       android:layout_centerHorizontal="true"
+                       android:src="@drawable/ico_cart_off"
+                       android:adjustViewBounds="true"
+                       android:scaleType="fitXY"
+                       android:padding="@dimen/padding_imageview"
+            />
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_below="@id/img_cart"
+                      android:layout_centerHorizontal="true"
+                      android:text="@string/tab_cart"
+                      android:textColor="@color/color_333333"
+                      android:textSize="@dimen/tab_text"
+            />
+        </RelativeLayout>
+        <RelativeLayout android:id="@+id/layout_tab_message"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+        >
+            <ImageView android:id="@+id/img_message"
+                       android:layout_width="@dimen/tab_img_width"
+                       android:layout_height="@dimen/tab_img_height"
+                       android:layout_centerHorizontal="true"
+                       android:src="@drawable/ico_msg_off"
+                       android:adjustViewBounds="true"
+                       android:scaleType="fitXY"
+                       android:padding="@dimen/padding_imageview"
+            />
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_centerHorizontal="true"
+                      android:layout_below="@id/img_message"
+                      android:text="@string/tab_message"
+                      android:textColor="@color/color_333333"
+                      android:textSize="@dimen/tab_text"
+            />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>
