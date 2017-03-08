@@ -3,9 +3,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-    <LinearLayout android:layout_width="match_parent"
-                  android:layout_height="@dimen/tab_height"
+
+    <LinearLayout android:id="@+id/layout_tab"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
                   android:layout_alignParentBottom="true"
+                  android:paddingBottom="4dp"
+                  android:paddingTop="4dp"
                   android:gravity="center_vertical"
                   android:background="@android:color/white"
                   android:orientation="horizontal"
@@ -24,7 +28,8 @@
                        android:scaleType="fitXY"
                        android:padding="@dimen/padding_imageview"
             />
-            <TextView android:layout_width="wrap_content"
+            <TextView android:id="@+id/txt_home"
+                      android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
                       android:layout_below="@id/img_home"
                       android:layout_centerHorizontal="true"
@@ -47,7 +52,8 @@
                        android:scaleType="fitXY"
                        android:padding="@dimen/padding_imageview"
             />
-            <TextView android:layout_width="wrap_content"
+            <TextView android:id="@+id/txt_cart"
+                      android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
                       android:layout_below="@id/img_cart"
                       android:layout_centerHorizontal="true"
@@ -59,27 +65,56 @@
         <RelativeLayout android:id="@+id/layout_tab_message"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-        >
-            <ImageView android:id="@+id/img_message"
-                       android:layout_width="@dimen/tab_img_width"
-                       android:layout_height="@dimen/tab_img_height"
-                       android:layout_centerHorizontal="true"
-                       android:src="@drawable/ico_msg_off"
-                       android:adjustViewBounds="true"
-                       android:scaleType="fitXY"
-                       android:padding="@dimen/padding_imageview"
+                        android:layout_weight="1">
+            <TextView android:id="@+id/img_message"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:background="@drawable/ico_message_off"
+                      android:layout_alignParentTop="true"
+                      android:layout_centerHorizontal="true"
             />
-            <TextView android:layout_width="wrap_content"
+            <TextView android:id="@+id/txt_message"
+                      android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
                       android:layout_centerHorizontal="true"
                       android:layout_below="@id/img_message"
                       android:text="@string/tab_message"
+                      android:textSize="@dimen/tab_text"
+                      android:textColor="@color/color_333333"
+            />
+        </RelativeLayout>
+
+        <RelativeLayout android:id="@+id/layout_tab_mine"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+        >
+            <ImageView android:id="@+id/img_mine"
+                       android:layout_width="@dimen/tab_img_width"
+                       android:layout_height="@dimen/tab_img_height"
+                       android:src="@drawable/ico_mine_off"
+                       android:adjustViewBounds="true"
+                       android:scaleType="fitXY"
+                       android:padding="@dimen/padding_imageview"
+                       android:layout_alignParentTop="true"
+                       android:layout_centerHorizontal="true"
+            />
+            <TextView android:id="@+id/txt_mine"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_centerHorizontal="true"
+                      android:layout_below="@id/img_mine"
+                      android:text="@string/tab_mine"
                       android:textColor="@color/color_333333"
                       android:textSize="@dimen/tab_text"
             />
         </RelativeLayout>
 
     </LinearLayout>
+    <RelativeLayout android:id="@+id/layout_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_above="@id/layout_tab"
+    />
 
 </RelativeLayout>
