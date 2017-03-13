@@ -88,9 +88,9 @@ public class HomePageActivity extends BaseActivity implements OnClickListener {
     @Override
     public void onClick(View v) {
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        int colorOn = ContextCompat.getColor(this, R.color.color_tab_red);
+        int colorOn = ContextCompat.getColor(this, R.color.red_tab);
         Log.d(TAG, "tab on: int color====== " + colorOn);
-        int colorOff = ContextCompat.getColor(this, R.color.color_tab_gray);
+        int colorOff = ContextCompat.getColor(this, R.color.gray_tab);
         switch (v.getId()) {
             case R.id.layout_tab_home:
                 mHomeImgView.setImageResource(R.drawable.ico_baggoods_on);

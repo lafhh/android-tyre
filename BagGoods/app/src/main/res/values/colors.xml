@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="white">#FFFFFF</color>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="color_333333">#333333</color>
-    <color name="color_tab_red">#f74e52</color>
-    <color name="color_tab_gray">#3E3E3E</color>
+    <color name="red_tab">#f74e52</color>
+    <color name="gray_tab">#3E3E3E</color>
+    <color name="red_bg_bar">#F45056</color>
+    <color name="gray_txt_hint">#8F8F8F</color>
 </resources>

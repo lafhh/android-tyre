@@ -15,7 +15,6 @@ import java.util.concurrent.Executors;
 
 /**
  * Created by apple on 17/2/18.
- *
  */
 public abstract class HttpManager {
     private static final String TAG = "HttpManager";
@@ -24,16 +23,9 @@ public abstract class HttpManager {
 
     private static Executor sFixedThreadPool = Executors.newFixedThreadPool(THREAD_POOL_MAX_SIZE);
 
-    public interface IHttpListener {
-        //应该定义另一个实体，给客户端用而不是response
-        void onResult(int action, Response response);
-        void onProgress(boolean isInProgress);
-    }
-
-    IHttpListener iHttpListener;
-
     protected void send(final int action,
-                     final List<NameValuePair<String, String>> datas) {
+                        final List<NameValuePair<String, String>> datas,
+                        final IHttpListener iHttpListener) {
         Runnable runnable = new Runnable() {
             public void run() {
                 iHttpListener.onProgress(true);
@@ -46,6 +38,7 @@ public abstract class HttpManager {
                     response.setResponseCode(ResponseCode.Failed);
                 }
 
+                //只有在响应200的情况下，解析业务码流
                 switch (response.getResponseCode()) {
                     case Succeed:
                     case BadRequest:
@@ -94,8 +87,9 @@ public abstract class HttpManager {
         return new ArrayList<>();
     }
 
-    protected boolean isGzip(int action) { return false; }
-
+    protected boolean isGzip(int action) {
+        return false;
+    }
 
 
     protected Request buildRequest(int action, List<NameValuePair<String, String>> datas) {
@@ -131,10 +125,6 @@ public abstract class HttpManager {
                 }
             }
         }
-    }
-
-    public void setListenner(IHttpListener listener) {
-        iHttpListener = listener;
     }
 
     protected Executor getsFixedThreadPool() {

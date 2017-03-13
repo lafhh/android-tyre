@@ -83,7 +83,7 @@ public class HttpConnector {
                 out.flush();
                 out.close();
 
-            } else if (request.getBody() != null) {
+            } else if (!StringUtil.isNullOrEmpty(request.getBody())) {
                 byte[] data = request.getBody().getBytes("UTF-8");
 
                 OutputStream out = conn.getOutputStream();
@@ -198,20 +198,12 @@ public class HttpConnector {
     public static void setRequestProperty(Request request,
     HttpURLConnection conn) {
         ContentType contentType = request.getContentType();
-        switch(contentType) {
+        switch(contentType) {   //XML和JSON是设置响应实体的格式，目前只有post需要Content-Type；FILE设置的是请求实体的格式。
             case XML:
-                if (request.getRequestMethod() == RequestMethod.POST) {
-                    conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-                } else {
-                    conn.setRequestProperty("Content-Type", "application/xml;charset=UTF-8");
-                }
-                break;
             case JSON:
                 if (request.getRequestMethod() == RequestMethod.POST) {
-                    conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-                } else {
-                    conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
-                }
+                conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+            }
                 break;
             case FILE:
                 conn.setRequestProperty("Connection", "Keep-Alive");
@@ -223,7 +215,7 @@ public class HttpConnector {
         boolean isGzip = request.isGzip();
         if (isGzip) {
             conn.setRequestProperty("Accept-Encoding", "gzip");
-            if (request.getBody() != null) {
+            if (!StringUtil.isNullOrEmpty(request.getBody())) {
                 conn.setRequestProperty("Content-Encoding", "gzip");
             }
         }
@@ -293,7 +285,6 @@ public class HttpConnector {
             int result = bis.read(header);
             bis.reset();
 
-            //这是什么？也要进行解压
             if (result == 2 &&
                     ((header[0] & 0xFF) | ((header[1] & 0xFF) << 8)) == 0x8b1f) {
                 gzis = new GZIPInputStream(bis);

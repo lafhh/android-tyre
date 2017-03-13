@@ -4,8 +4,49 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <TextView android:layout_width="match_parent"
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/red_bg_bar"
+                    android:padding="@dimen/bar_padding"
+    >
+        <TextView android:id="@+id/txt_bar_code"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_centerVertical="true"
+                  android:background="@drawable/ico_bar_code_scan"
+        />
+        <ImageView android:id="@+id/img_search"
+                   android:layout_width="@dimen/bar_icon_width"
+                   android:layout_height="@dimen/bar_icon_height"
+                   android:layout_alignParentRight="true"
+                   android:layout_centerVertical="true"
+                   android:adjustViewBounds="true"
+                   android:scaleType="fitXY"
+                   android:padding="1dp"
+                   android:src="@drawable/ico_search"
+        />
+        <TextView android:id="@+id/txt_search"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_toRightOf="@id/txt_bar_code"
+                  android:layout_toLeftOf="@id/img_search"
+                  android:layout_centerVertical="true"
+                  android:layout_marginLeft="@dimen/txt_search_margin"
+                  android:layout_marginRight="9dp"
+                  android:background="@drawable/bg_txt_search"
+                  android:gravity="center"
+                  android:padding="6dp"
+                  android:text="@string/hint_txt_search"
+                  android:textColor="@color/gray_txt_hint"
+                  android:textSize="@dimen/txt_search"
+        />
+    </RelativeLayout>
+    <TextView android:id="@+id/txt_no_network"
+              android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:text="fragment1"
+              android:visibility="gone"
     />
+
+
+
 </LinearLayout>

@@ -6,6 +6,11 @@
     <dimen name="tab_paddingTop">4dp</dimen>
     <dimen name="tab_img_width">24dp</dimen>
     <dimen name="tab_img_height">24dp</dimen>
-    <dimen name="tab_text">14sp</dimen>
     <dimen name="padding_imageview">2dp</dimen>
+    <dimen name="bar_icon_width">18dp</dimen>
+    <dimen name="bar_icon_height">18dp</dimen>
+    <dimen name="bar_padding">8dp</dimen>
+    <dimen name="txt_search_margin">10dp</dimen>
+    <dimen name="tab_text">14sp</dimen>
+    <dimen name="txt_search">16sp</dimen>
 </resources>
