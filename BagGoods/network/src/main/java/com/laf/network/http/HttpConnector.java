@@ -114,14 +114,14 @@ public class HttpConnector {
 //                        + " statuscode : " + responseCode
 //                        + " body : " + response.getData());
                     System.out.println("url : " + request.getUrl()
-                        + " statuscode : " + responseCode
-                        + " body : " + response.getData());
+                        + "; statuscode : " + responseCode
+                        + "; body : " + response.getData());
                     break;
                 default:
 //                    Log.d(TAG, "url : " + request.getUrl()
 //                        + " statuscode : " + responseCode);
                    System.out.println("url : " + request.getUrl()
-                        + " statuscode : " + responseCode);
+                        + "; statuscode : " + responseCode);
                     break;
             }
         } catch (MalformedURLException e) {

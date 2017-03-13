@@ -1,4 +1,4 @@
-package com.laf.baggoods.ui.http;
+package com.laf.baggoods.http;
 
 import com.laf.baggoods.util.SysTools;
 import com.laf.network.http.HttpManager;
@@ -82,6 +82,6 @@ public class ImplHttpManager extends HttpManager {
 
                 break;
         }
-        return null;
+        return data;
     }
 }

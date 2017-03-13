@@ -12,7 +12,8 @@ public abstract class UploadHttpManager extends HttpManager {
 
     protected void send(final int action,
                         final List<NameValuePair<String, String>> datas,
-                        final String path) {
+                        final String path,
+                        final IHttpListener iHttpListener) {
         Runnable runnable = new Runnable() {
             public void run() {
                 iHttpListener.onProgress(true);

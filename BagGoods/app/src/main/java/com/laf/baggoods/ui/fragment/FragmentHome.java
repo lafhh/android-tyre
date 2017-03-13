@@ -1,8 +1,9 @@
 package com.laf.baggoods.ui.fragment;
 
+import android.util.Log;
 import com.laf.baggoods.R;
 import com.laf.baggoods.ui.basic.FragmentBase;
-import com.laf.baggoods.ui.http.ImplHttpManager;
+import com.laf.baggoods.http.ImplHttpManager;
 import com.laf.model.Advertisement;
 import com.laf.model.Brand;
 import com.laf.network.http.IHttpListener;
@@ -35,12 +36,16 @@ public class FragmentHome extends FragmentBase {
     protected void addListener() {
     }
 
+    /**
+     * 请求首页数据,通过获取的数据更新UI
+     */
     private void requestHomeData() {
         new ImplHttpManager().requestHomeData(
             new IHttpListener() {
                 @Override
                 public void onResult(int action, Response response) {
                     //假数据
+                    Log.d(TAG, "on success: " + response.getData().toString());
                 }
 
                 @Override

@@ -1,4 +1,4 @@
-package com.laf.baggoods.ui;
+package com.laf.baggoods.ui.activity;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

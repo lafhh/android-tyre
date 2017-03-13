@@ -1,5 +1,6 @@
 package com.laf.network.http;
 
+import android.util.JsonReader;
 import android.util.Log;
 import com.laf.network.http.Request.ContentType;
 import com.laf.network.http.Request.RequestMethod;
@@ -47,7 +48,8 @@ public abstract class HttpManager {
                     case NotFound:
                     case Conflict:
                     case InternalError:
-                        parserResult(action, response);
+                        //先不解析，先造假数据
+//                        parserResult(action, response);
                         if (response.getResponseCode() == ResponseCode.Succeed) {
                             response.setObj(handleData(action, datas, response));
                         }
