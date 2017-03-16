@@ -1,5 +1,6 @@
 package com.laf.baggoods.ui.basic;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,15 +15,22 @@ import com.laf.baggoods.App;
 
 public abstract class FragmentBase extends Fragment {
 
-    private Context mContext;
+    protected Context mContext;
     private LayoutInflater mInflater;
     private ViewGroup mContainer;
-    private View mMainView;
+    protected View mMainView;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext = context;
+
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mContext = App.getContext();
+//        mContext = App.getContext();
     }
 
     @Override
@@ -35,6 +43,10 @@ public abstract class FragmentBase extends Fragment {
         initView();
         addListener();
         return mMainView;
+    }
+
+    public interface OnFragmentInteractionListener {
+
     }
 
     protected void initView() {}

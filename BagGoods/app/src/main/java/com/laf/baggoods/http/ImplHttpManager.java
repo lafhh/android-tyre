@@ -1,5 +1,6 @@
 package com.laf.baggoods.http;
 
+import com.laf.baggoods.util.NewContainer;
 import com.laf.baggoods.util.SysTools;
 import com.laf.network.http.HttpManager;
 import com.laf.network.http.IHttpListener;
@@ -25,7 +26,7 @@ public class ImplHttpManager extends HttpManager {
      * 请求首页数据
      */
     public void requestHomeData(IHttpListener listener) {
-        send(HOME, null, listener);
+        send(HOME, NewContainer.<NameValuePair<String,String>>list(), listener);
     }
 
 

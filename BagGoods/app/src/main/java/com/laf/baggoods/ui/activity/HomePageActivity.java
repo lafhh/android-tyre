@@ -1,5 +1,6 @@
 package com.laf.baggoods.ui.activity;
 
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -12,10 +13,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.laf.baggoods.R;
 import com.laf.baggoods.ui.basic.BaseActivity;
+import com.laf.baggoods.ui.basic.FragmentBase;
 import com.laf.baggoods.ui.fragment.FragmentCart;
 import com.laf.baggoods.ui.fragment.FragmentHome;
 import com.laf.baggoods.ui.fragment.FragmentMessage;
 import com.laf.baggoods.ui.fragment.FragmentMine;
+import com.laf.model.HomeDataValue;
 
 /**
  * Created by apple on 17/3/3.
@@ -25,10 +28,10 @@ public class HomePageActivity extends BaseActivity implements OnClickListener {
     private static final String TAG = "HomePageActivity";
 
     private FragmentManager fm;
-    private Fragment mHomeFragment;
-    private Fragment mCartFragment;
-    private Fragment mMessageFragment;
-    private Fragment mMineFragment;
+    private FragmentHome mHomeFragment;
+    private FragmentCart mCartFragment;
+    private FragmentMessage mMessageFragment;
+    private FragmentMine mMineFragment;
     private Fragment mCurrent;
 
     private RelativeLayout mHomeLayout;
@@ -178,5 +181,14 @@ public class HomePageActivity extends BaseActivity implements OnClickListener {
                 break;
         }
         fragmentTransaction.commit();
+    }
+
+    public void handlerUIMessage(Message msg) {
+        switch (msg.what) {
+            case FragmentHome.MESSAGE_HOME_DATA:
+                mHomeFragment.updateUI();
+                break;
+        }
+
     }
 }

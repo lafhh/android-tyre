@@ -47,6 +47,11 @@
               android:visibility="gone"
     />
 
-
-
+    <ListView android:id="@+id/lv_home"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:alwaysDrawnWithCache="false"
+              android:divider="@color/gray_lv_divider"
+              android:dividerHeight="10dp"
+    />
 </LinearLayout>
