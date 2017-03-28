@@ -62,9 +62,7 @@ public class SlidePagerAdapter extends PagerAdapter {
         super.setPrimaryItem(container, position, object);
         //每滑动一次调用3次
 //        ImageView view = (ImageView) object;
-//        ViewPager pager = (ViewPager) container;
 //        int height = view.getDrawable().getIntrinsicHeight();
-//        pager.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, 200));
     }
 
     private ImageView createImageView(ViewGroup parent, String url) {

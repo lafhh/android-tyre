@@ -1,7 +1,10 @@
 package com.laf.baggoods.http;
 
+import android.annotation.TargetApi;
+import android.os.Build;
 import com.laf.baggoods.util.NewContainer;
 import com.laf.baggoods.util.SysTools;
+import com.laf.imageloader.download.ImageDownLoader;
 import com.laf.network.http.HttpManager;
 import com.laf.network.http.IHttpListener;
 import com.laf.network.http.NetUtil;
@@ -9,6 +12,7 @@ import com.laf.network.http.Request.RequestMethod;
 import com.laf.network.http.Response;
 import com.laf.network.util.NameValuePair;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -21,6 +25,8 @@ public class ImplHttpManager extends HttpManager {
      * 登录action
      */
     private static final int HOME = 0x00000001;
+
+//    private static final String UTF_8 = StandardCharsets.UTF_8.name();
 
     /**
      * 请求首页数据

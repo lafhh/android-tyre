@@ -53,7 +53,7 @@ public class HttpConnector {
                 conn = getHttpsConn(url);
             }
 
-            conn.setDoInput(true);
+            conn.setDoInput(true); //不传的话默认也是true
             conn.setUseCaches(false);
             setRequestMethod(request, conn);
             setRequestProperty(request, conn);
@@ -100,7 +100,7 @@ public class HttpConnector {
             }
 
             int responseCode = initResponseCode(response, conn);
-            switch(responseCode) {
+            switch(responseCode) {  //不管返回码是200，4xx,或5xx,都用InputStream读取,而没有使用ErrorStream
                 case HttpURLConnection.HTTP_BAD_REQUEST:
                 case HttpURLConnection.HTTP_UNAUTHORIZED:
                 case HttpURLConnection.HTTP_FORBIDDEN:
@@ -144,7 +144,7 @@ public class HttpConnector {
             if (conn != null) {
                 try {
                     int responseCode = initResponseCode(response, conn);
-                            switch (responseCode) {
+                            switch (responseCode) {  //如果InputStream获取出现IO异常，使用ErrorStream读取错误返回码的码流
                                 case HttpURLConnection.HTTP_BAD_REQUEST:
                                 case HttpURLConnection.HTTP_UNAUTHORIZED:
                                 case HttpURLConnection.HTTP_FORBIDDEN:
@@ -178,7 +178,8 @@ public class HttpConnector {
         RequestMethod method = request.getRequestMethod();
         switch(method) {
             case GET:
-                conn.setRequestMethod("GET");
+                //default "get"
+                //conn.setRequestMethod("GET");
             case POST:
                 conn.setRequestMethod("POST");
                 conn.setDoOutput(true);
@@ -198,7 +199,7 @@ public class HttpConnector {
     public static void setRequestProperty(Request request,
     HttpURLConnection conn) {
         ContentType contentType = request.getContentType();
-        switch(contentType) {   //XML和JSON是设置响应实体的格式，目前只有post需要Content-Type；FILE设置的是请求实体的格式。
+        switch(contentType) {   //XML和JSON是设置响应实体的格式，post请求带实体，get不带；FILE设置的是请求实体的格式。
             case XML:
             case JSON:
                 if (request.getRequestMethod() == RequestMethod.POST) {
@@ -316,7 +317,9 @@ public class HttpConnector {
         return https;
     }
 
-    //信任所有证书
+    /**
+     * 信任所有证书
+     */
     private static void trustAll() {
         TrustManager[] trustAllCertificates = new TrustManager[] {
             new X509TrustManager() {

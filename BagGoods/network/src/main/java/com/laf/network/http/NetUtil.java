@@ -15,6 +15,7 @@ public class NetUtil {
 
     /**
      * 请求首页数据
+     * http://120.27.195.220:80/api/products.json?resolution=1920*1680&requestType=homex
      */
     public static final String GET_HOME = URL_PRODUCTS + "?resolution=%s&" + GET_TYPE + "homex";
 

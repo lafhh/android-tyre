@@ -1,8 +1,12 @@
 package com.laf.baggoods.ui.fragment;
 
+import android.content.Intent;
 import android.os.Message;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ListView;
+import android.widget.TextView;
 import com.laf.baggoods.R;
 import com.laf.baggoods.http.ImplHttpManager;
 import com.laf.baggoods.ui.adapter.LvHomeAdapter;
@@ -11,6 +15,7 @@ import com.laf.baggoods.ui.basic.FragmentBase;
 import com.laf.model.HomeDataValue;
 import com.laf.network.http.IHttpListener;
 import com.laf.network.http.Response;
+import com.laf.qrcode.zxing.app.CaptureActivity;
 
 import java.util.ArrayList;
 
@@ -18,13 +23,14 @@ import java.util.ArrayList;
  * Created by apple on 2017/3/6.
  */
 
-public class FragmentHome extends FragmentBase {
+public class FragmentHome extends FragmentBase implements OnClickListener {
     private static final String TAG = "FragmentHome";
     public static final int MESSAGE_HOME_DATA = 1;
 
     private ArrayList<HomeDataValue> homeDatas = new ArrayList<>();
 
-    private ListView lvHome;
+    private TextView mTxtViewQrcode;
+    private ListView mLvHome;
 
     @Override
     protected int getFragmentId() {
@@ -33,13 +39,15 @@ public class FragmentHome extends FragmentBase {
 
     @Override
     protected void initView() {
-        lvHome = (ListView) mMainView.findViewById(R.id.lv_home);
+        mTxtViewQrcode = (TextView) mMainView.findViewById(R.id.txt_bar_code);
+        mLvHome = (ListView) mMainView.findViewById(R.id.lv_home);
 //        requestHomeData();
         updateUI();
     }
 
     @Override
     protected void addListener() {
+        mTxtViewQrcode.setOnClickListener(this);
     }
 
     /**
@@ -77,8 +85,17 @@ public class FragmentHome extends FragmentBase {
             else value.type = 2;
             homeDatas.add(value);
         }
-        lvHome.setAdapter(new LvHomeAdapter(mContext, homeDatas));
+        mLvHome.setAdapter(new LvHomeAdapter(mContext, homeDatas));
 
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.txt_bar_code:
+                Intent intent = new Intent(mContext, CaptureActivity.class);
+                startActivity(intent);
+                break;
+        }
+    }
 }

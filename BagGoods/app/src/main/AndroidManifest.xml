@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
 
     <application
             android:allowBackup="true"
@@ -14,6 +15,9 @@
             android:theme="@style/AppTheme"
             android:name=".App">
         <activity android:name=".ui.activity.HomePageActivity">
+
+        </activity>
+        <activity android:name=".ui.activity.TestActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
